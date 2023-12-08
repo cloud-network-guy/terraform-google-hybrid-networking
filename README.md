@@ -11,6 +11,7 @@ Management of Cloud Routers, Interconnects, and VPNs
 - [google_compute_ha_vpn_gateway](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_ha_vpn_gateway)
 - [google_compute_external_vpn_gateway](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_external_vpn_gateway)
 - [random_string](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string)
+- [null_resource](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource)
 
 ## Inputs 
 
