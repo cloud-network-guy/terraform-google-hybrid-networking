@@ -58,7 +58,7 @@ locals {
 
 # Generate a random PSK for each tunnel, if required
 resource "random_string" "ike_psks" {
-  for_each = { for i, v in local.___vpn_tunnels : v.index_key => true if v.ike_psk == null }
+  for_each = { for i, v in local.___vpn_tunnels : v.index_key => true } #if v.ike_psk == null }
   length   = lookup(var.defaults, "vpn_ike_psk_length", 20)
   special  = false
 }
