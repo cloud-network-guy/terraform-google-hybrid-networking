@@ -56,12 +56,13 @@ locals {
   ]
 }
 
-# Generate a random PSK for each tunnel, if required
+/* Generate a random PSK for each tunnel, if required
 resource "random_string" "ike_psks" {
   for_each = { for i, v in local.___vpn_tunnels : v.index_key => true } #if v.ike_psk == null }
   length   = lookup(var.defaults, "vpn_ike_psk_length", 20)
   special  = false
 }
+*/
 
 locals {
   gcp_gateway_prefix = "https://www.googleapis.com/compute/v1/projects"
@@ -73,7 +74,7 @@ locals {
       shared_secret = coalesce(
         v.ike_psk,
         var.defaults.vpn_ike_psk,
-        resource.random_string.ike_psks[v.index_key].result,
+        #resource.random_string.ike_psks[v.index_key].result,
         "abcdefghij0123456789"
       )
       peer_external_gateway_interface = v.peer_is_gcp ? null : v.peer_external_gateway_interface
