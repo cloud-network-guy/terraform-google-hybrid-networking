@@ -42,5 +42,5 @@ resource "google_compute_external_vpn_gateway" "default" {
       ip_address = interface.value
     }
   }
-  depends_on = [ null_resource.peer_vpn_gateways ]
+  depends_on = [null_resource.peer_vpn_gateways]
 }
