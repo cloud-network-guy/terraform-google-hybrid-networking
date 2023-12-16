@@ -23,6 +23,10 @@ locals {
   ]
 }
 
+resource "null_resource" "peer_vpn_gateways" {
+  for_each = { for i, v in local.peer_vpn_gateways : v.index_key => true }
+}
+
 # Peer (External) VPN Gateway
 resource "google_compute_external_vpn_gateway" "default" {
   for_each        = { for k, v in local.peer_vpn_gateways : v.index_key => v }
@@ -38,4 +42,5 @@ resource "google_compute_external_vpn_gateway" "default" {
       ip_address = interface.value
     }
   }
+  depends_on = [ null_resource.peer_vpn_gateways ]
 }
