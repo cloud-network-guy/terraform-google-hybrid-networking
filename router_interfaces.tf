@@ -18,11 +18,6 @@ locals {
   ]
 }
 
-# Create null for each router interface, so peers get deleted at same time of IP change
-resource "null_resource" "router_interfaces" {
-  for_each = { for i, v in local.router_interfaces : v.index_key => v.ip_range }
-}
-
 # Cloud Router Interface
 resource "google_compute_router_interface" "default" {
   for_each                = { for i, v in local.router_interfaces : v.index_key => v }
@@ -33,6 +28,6 @@ resource "google_compute_router_interface" "default" {
   ip_range                = each.value.ip_range
   vpn_tunnel              = each.value.vpn_tunnel
   interconnect_attachment = each.value.interconnect_attachment
-  depends_on              = [google_compute_interconnect_attachment.default, google_compute_vpn_tunnel.default, null_resource.router_interfaces]
+  depends_on              = [google_compute_interconnect_attachment.default, google_compute_vpn_tunnel.default]
 }
 
