@@ -48,8 +48,13 @@ locals {
   ]
   ___vpn_tunnels = [for i, v in local.__vpn_tunnels :
     merge(v, {
-      interface_name        = coalesce(v.interface_name, v.peer_bgp_name != null ? "if-${v.peer_bgp_name}" : v.name)
       peer_bgp_name         = coalesce(v.peer_bgp_name, v.name)
+      cloud_vpn_gateway_key = "${v.project_id}/${v.region}/${v.cloud_vpn_gateway}"
+    })
+  ]
+  ____vpn_tunnels = [for i, v in local.___vpn_tunnels :
+    merge(v, {
+      interface_name        = coalesce(v.interface_name, "if-${v.peer_bgp_name}")
       index_key             = "${v.project_id}/${v.region}/${v.name}"
       cloud_vpn_gateway_key = "${v.project_id}/${v.region}/${v.cloud_vpn_gateway}"
     })
