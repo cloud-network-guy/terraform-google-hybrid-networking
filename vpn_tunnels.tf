@@ -71,7 +71,7 @@ resource "random_string" "ike_psks" {
 
 locals {
   gcp_gateway_prefix = "https://www.googleapis.com/compute/v1/projects"
-  vpn_tunnels = [for i, v in local.___vpn_tunnels :
+  vpn_tunnels = [for i, v in local.____vpn_tunnels :
     merge(v, {
       vpn_tunnel       = v.name
       vpn_gateway      = coalesce(v.cloud_vpn_gateway, try(local.cloud_vpn_gateways[v.cloud_vpn_gateway].name, "error"))
