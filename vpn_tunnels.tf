@@ -48,8 +48,8 @@ locals {
   ]
   ___vpn_tunnels = [for i, v in local.__vpn_tunnels :
     merge(v, {
-      interface_name        = coalesce(v.interface_name, "${v.name}")
-      peer_bgp_name         = coalesce(v.peer_bgp_name, "${v.name}-${v.tunnel_index}")
+      interface_name        = coalesce(v.interface_name, "if-${v.name}")
+      peer_bgp_name         = coalesce(v.peer_bgp_name, v.name)
       index_key             = "${v.project_id}/${v.region}/${v.name}"
       cloud_vpn_gateway_key = "${v.project_id}/${v.region}/${v.cloud_vpn_gateway}"
     })
@@ -108,4 +108,9 @@ resource "google_compute_vpn_tunnel" "default" {
     google_compute_external_vpn_gateway.default,
     null_resource.vpn_tunnels,
   ]
+  timeouts {
+    create = null
+    delete = null
+    update = null
+  }
 }
