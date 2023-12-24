@@ -58,5 +58,10 @@ resource "google_compute_router_peer" "default" {
   }
   enable      = each.value.enable
   enable_ipv6 = each.value.enable_ipv6
-  depends_on  = [google_compute_router_interface.default]
+  timeouts {
+    create = null
+    delete = null
+    update = null
+  }
+  depends_on = [google_compute_router_interface.default]
 }
