@@ -28,11 +28,6 @@ resource "google_compute_router_interface" "default" {
   ip_range                = each.value.ip_range
   vpn_tunnel              = each.value.vpn_tunnel
   interconnect_attachment = each.value.interconnect_attachment
-  timeouts {
-    create = null
-    delete = null
-    update = null
-  }
   depends_on = [google_compute_interconnect_attachment.default, google_compute_vpn_tunnel.default]
 }
 
