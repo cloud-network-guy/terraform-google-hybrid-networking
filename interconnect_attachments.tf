@@ -6,13 +6,13 @@ locals {
         is_interconnect   = true
         is_vpn            = false
         project_id        = coalesce(v.project_id, var.project_id)
-        name              = coalesce(v.name, "interconnect-${i}-${c}")
-        description       = v.description
+        name              = coalesce(circuit.name, "interconnect-${i}-${c}")
+        description       = circuit.description
         region            = coalesce(v.region, var.region)
         interconnect_type = upper(coalesce(v.type, "PARTNER"))
         ip_range          = circuit.cloud_router_ip
         mtu               = coalesce(circuit.mtu, v.mtu, 1440)
-        enable            = coalesce(circuit.enable, true)
+        admin_enabled     = true #coalesce(circuit.enable, true)
       }
     ]
   ])
@@ -36,7 +36,7 @@ resource "google_compute_interconnect_attachment" "default" {
   ipsec_internal_addresses = []
   encryption               = each.value.encryption
   mtu                      = each.value.mtu
-  admin_enabled            = each.value.enable
+  admin_enabled            = each.value.admin_enabled
   type                     = each.value.type
   interconnect             = each.value.interconnect
   #  depends_on               = [google_compute_router.default]
