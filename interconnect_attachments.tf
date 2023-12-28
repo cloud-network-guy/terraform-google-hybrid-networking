@@ -2,17 +2,21 @@ locals {
   _interconnect_attachments = flatten([
     for i, v in var.interconnects : [
       for c, circuit in v.circuits : {
-        create          = coalesce(v.create, true)
-        is_interconnect = true
-        is_vpn          = false
-        project_id      = coalesce(v.project_id, var.project_id)
-        name            = coalesce(circuit.name, "interconnect-${i}-${c}")
-        description     = circuit.description
-        region          = coalesce(v.region, var.region)
-        type            = upper(coalesce(v.type, "PARTNER"))
-        ip_range        = circuit.cloud_router_ip
-        mtu             = coalesce(circuit.mtu, v.mtu, 1440)
-        admin_enabled   = true #coalesce(circuit.enable, true)
+        create               = coalesce(v.create, true)
+        is_interconnect      = true
+        is_vpn               = false
+        project_id           = coalesce(v.project_id, var.project_id)
+        name                 = coalesce(circuit.name, "interconnect-${i}-${c}")
+        description          = circuit.description
+        region               = coalesce(v.region, var.region)
+        router               = v.cloud_router
+        peer_asn             = try(v.peer_bgp_asn, null)
+        advertised_ip_ranges = coalesce(v.advertised_ip_ranges, [])
+        type                 = upper(coalesce(v.type, "PARTNER"))
+        ip_range             = circuit.cloud_router_ip
+        peer_ip_address      = circuit.bgp_peer_ip
+        mtu                  = coalesce(circuit.mtu, v.mtu, 1440)
+        admin_enabled        = true #coalesce(circuit.enable, true)
       }
     ]
   ])
