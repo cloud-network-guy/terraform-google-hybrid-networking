@@ -19,6 +19,7 @@ locals {
         peer_asn             = coalesce(attachment.peer_bgp_asn, 16550)
         advertised_ip_ranges = coalesce(v.advertised_ip_ranges, [])
         advertised_groups    = []
+        advertised_priority  = coalesce(attachment.advertised_priority, v.advertised_priority, 100)
         ip_range             = attachment.cloud_router_ip
         peer_ip_address      = attachment.peer_bgp_ip
         mtu                  = coalesce(attachment.mtu, v.mtu, 1440)
