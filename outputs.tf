@@ -43,11 +43,12 @@ output "interconnect_attachments" {
   value = {
     for i, v in local.interconnect_attachments :
     v.index_key => {
-      index_key   = v.index_key
-      name        = v.name
-      bandwidth   = try(google_compute_interconnect_attachment.default[v.index_key].bandwidth, "Unknown")
-      pairing_key = try(google_compute_interconnect_attachment.default[v.index_key].pairin_key, "Unknown")
-      state       = try(google_compute_interconnect_attachment.default[v.index_key].state, "Unknown")
+      index_key                 = v.index_key
+      name                      = v.name
+      bandwidth                 = try(google_compute_interconnect_attachment.default[v.index_key].bandwidth, "Unknown")
+      pairing_key               = v.type == "PARTNER" ? google_compute_interconnect_attachment.default[v.index_key].pairing_key : null
+      private_interconnect_info = v.type == "DEDICATED" ? google_compute_interconnect_attachment.default[v.index_key].private_interconnect_info : null
+      state                     = try(google_compute_interconnect_attachment.default[v.index_key].state, "Unknown")
     }
   }
 }
