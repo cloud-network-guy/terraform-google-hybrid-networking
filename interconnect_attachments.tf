@@ -52,5 +52,10 @@ resource "google_compute_interconnect_attachment" "default" {
   admin_enabled            = each.value.admin_enabled
   type                     = each.value.type
   interconnect             = each.value.interconnect
+  timeouts {
+    create = null
+    delete = null
+    update = null
+  }
   #  depends_on               = [google_compute_router.default]
 }
