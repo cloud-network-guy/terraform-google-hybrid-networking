@@ -46,7 +46,7 @@ output "interconnect_attachments" {
       index_key                 = v.index_key
       name                      = v.name
       bandwidth                 = try(google_compute_interconnect_attachment.default[v.index_key].bandwidth, "Unknown")
-      interconnect              = try(google_compute_interconnect_attachment.default[v.index_key].interconnect, "")
+      edge_availability_domain  = v.type == "PARTNER" ? google_compute_interconnect_attachment.default[v.index_key].edge_availability_domain : null
       vlan_tag8021q             = try(google_compute_interconnect_attachment.default[v.index_key].vlan_tag8021q, 0)
       pairing_key               = v.type == "PARTNER" ? google_compute_interconnect_attachment.default[v.index_key].pairing_key : null
       private_interconnect_info = v.type == "DEDICATED" ? google_compute_interconnect_attachment.default[v.index_key].private_interconnect_info : null
