@@ -50,6 +50,7 @@ output "interconnect_attachments" {
       vlan_tag8021q              = try(google_compute_interconnect_attachment.default[v.index_key].vlan_tag8021q, 0)
       pairing_key                = v.type == "PARTNER" ? google_compute_interconnect_attachment.default[v.index_key].pairing_key : null
       private_interconnect_info  = v.type == "DEDICATED" ? google_compute_interconnect_attachment.default[v.index_key].private_interconnect_info : null
+      cloud_router_ip_address    = try(google_compute_interconnect_attachment.default[v.index_key].cloud_router_ip_address, "Unknown")
       customer_router_ip_address = try(google_compute_interconnect_attachment.default[v.index_key].customer_router_ip_address, "Unknown")
       state                      = try(google_compute_interconnect_attachment.default[v.index_key].state, "Unknown")
     }
