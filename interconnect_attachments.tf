@@ -15,11 +15,11 @@ locals {
         interface_name       = circuit.interface_name
         peer_bgp_ip          = circuit.peer_bgp_name
         peer_bgp_name        = circuit.peer_bgp_name
-        peer_asn             = coalesce(v.peer_bgp_asn, 16550)
+        peer_asn             = coalesce(circuit.peer_bgp_asn, 16550)
         advertised_ip_ranges = coalesce(v.advertised_ip_ranges, [])
         advertised_groups    = []
         ip_range             = circuit.cloud_router_ip
-        peer_ip_address      = circuit.bgp_peer_ip
+        peer_ip_address      = circuit.peer_bgp_ip
         mtu                  = coalesce(circuit.mtu, v.mtu, 1440)
         admin_enabled        = true #coalesce(circuit.enable, true)
       }
