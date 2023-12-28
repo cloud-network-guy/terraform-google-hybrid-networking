@@ -105,13 +105,12 @@ variable "interconnects" {
     enable         = optional(bool)
     enable_bfd     = optional(bool)
     bfd_parameters = optional(list(number))
-    circuits = list(object({
-      interface_index     = optional(number)
-      attachment_name     = optional(string)
-      interface_name      = optional(string)
+    attachments = list(object({
       name                = optional(string)
       description         = optional(string)
       mtu                 = optional(number)
+      interface_index     = optional(number)
+      interface_name      = optional(string)
       cloud_router_ip     = optional(string)
       peer_bgp_name       = optional(string)
       peer_bgp_ip         = optional(string)

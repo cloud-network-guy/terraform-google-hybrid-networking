@@ -1,29 +1,29 @@
 locals {
   _interconnect_attachments = flatten([
     for i, v in var.interconnects : [
-      for c, circuit in v.circuits : {
+      for a, attachment in v.attachments : {
         create               = coalesce(v.create, true)
         is_interconnect      = true
         is_vpn               = false
         peer_is_gcp          = false
-        attachment_name      = circuit.attachment_name,
+        attachment_name      = attachment.attachment_name,
         type                 = upper(coalesce(v.type, "PARTNER"))
         project_id           = coalesce(v.project_id, var.project_id)
-        name                 = coalesce(circuit.name, "interconnect-${i}-${c}")
-        description          = circuit.description
+        name                 = coalesce(attachment.name, "attachment-${i}-${a}")
+        description          = attachment.description
         region               = coalesce(v.region, var.region)
         router               = v.cloud_router
-        interface_name       = circuit.interface_name
-        peer_bgp_ip          = circuit.peer_bgp_name
-        peer_bgp_name        = circuit.peer_bgp_name
-        peer_asn             = coalesce(circuit.peer_bgp_asn, 16550)
+        interface_name       = attachment.interface_name
+        peer_bgp_ip          = attachment.peer_bgp_name
+        peer_bgp_name        = attachment.peer_bgp_name
+        peer_asn             = coalesce(attachment.peer_bgp_asn, 16550)
         advertised_ip_ranges = coalesce(v.advertised_ip_ranges, [])
         advertised_groups    = []
-        ip_range             = circuit.cloud_router_ip
-        peer_ip_address      = circuit.peer_bgp_ip
-        mtu                  = coalesce(circuit.mtu, v.mtu, 1440)
-        admin_enabled        = true #coalesce(circuit.enable, true)
-        encryption           = null
+        ip_range             = attachment.cloud_router_ip
+        peer_ip_address      = attachment.peer_bgp_ip
+        mtu                  = coalesce(attachment.mtu, v.mtu, 1440)
+        admin_enabled        = true #coalesce(attachment.enable, true)
+        encryption           = "NONE"
       }
     ]
   ])
