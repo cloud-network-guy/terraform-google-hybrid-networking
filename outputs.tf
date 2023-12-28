@@ -39,3 +39,12 @@ output "vpn_tunnels" {
   }
 }
 
+output "interconnect_attachments" {
+  value = {
+    for i, v in local.interconnect_attachments :
+    v.index_key => {
+      index_key = v.index_key
+      name      = v.name
+    }
+  }
+}
