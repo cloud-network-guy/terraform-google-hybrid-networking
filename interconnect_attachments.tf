@@ -1,7 +1,7 @@
 locals {
   _interconnect_attachments = flatten([
     for i, v in var.interconnects : [
-      for c, circuit in v.ciruits : {
+      for c, circuit in v.circuits : {
         create            = coalesce(v.create, true)
         is_interconnect   = true
         is_vpn            = false
@@ -19,8 +19,9 @@ locals {
   interconnect_attachments = [
     for i, v in local._interconnect_attachments :
     merge(v, {
-      index_key = "${v.project_id}/${v.region}/${v.name}"
-    }) if v.create
+      interconnect = v.type == "DEDICATED" ? v.interconnect : null
+      index_key    = "${v.project_id}/${v.region}/${v.name}"
+    }) if v.create == true
   ]
 }
 
@@ -36,7 +37,7 @@ resource "google_compute_interconnect_attachment" "default" {
   encryption               = each.value.encryption
   mtu                      = each.value.mtu
   admin_enabled            = each.value.enable
-  type                     = each.value.interconnect_type
-  interconnect             = each.value.interconnect_type == "DEDICATED" ? each.value.interconnect : null
+  type                     = each.value.type
+  interconnect             = each.value.interconnect
   #  depends_on               = [google_compute_router.default]
 }
