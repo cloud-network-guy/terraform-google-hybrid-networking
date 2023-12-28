@@ -2,11 +2,11 @@ locals {
   _interconnect_attachments = flatten([
     for i, v in var.interconnects : [
       for a, attachment in v.attachments : {
-        create               = coalesce(v.create, true)
-        is_interconnect      = true
-        is_vpn               = false
-        peer_is_gcp          = false
-        attachment_name      = attachment.attachment_name,
+        create          = coalesce(v.create, true)
+        is_interconnect = true
+        is_vpn          = false
+        peer_is_gcp     = false
+        #attachment_name      = attachment.name,
         type                 = upper(coalesce(v.type, "PARTNER"))
         project_id           = coalesce(v.project_id, var.project_id)
         name                 = coalesce(attachment.name, "attachment-${i}-${a}")
@@ -30,8 +30,9 @@ locals {
   interconnect_attachments = [
     for i, v in local._interconnect_attachments :
     merge(v, {
-      interconnect = v.type == "DEDICATED" ? v.interconnect : null
-      index_key    = "${v.project_id}/${v.region}/${v.name}"
+      interconnect    = v.type == "DEDICATED" ? v.interconnect : null
+      attachment_name = v.name
+      index_key       = "${v.project_id}/${v.region}/${v.name}"
     }) if v.create == true
   ]
 }
