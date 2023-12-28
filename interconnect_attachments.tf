@@ -6,6 +6,7 @@ locals {
         is_interconnect      = true
         is_vpn               = false
         peer_is_gcp          = false
+        attachment_name      = circuit.attachment_name,
         type                 = upper(coalesce(v.type, "PARTNER"))
         project_id           = coalesce(v.project_id, var.project_id)
         name                 = coalesce(circuit.name, "interconnect-${i}-${c}")
@@ -22,6 +23,7 @@ locals {
         peer_ip_address      = circuit.peer_bgp_ip
         mtu                  = coalesce(circuit.mtu, v.mtu, 1440)
         admin_enabled        = true #coalesce(circuit.enable, true)
+        encryption           = null
       }
     ]
   ])
