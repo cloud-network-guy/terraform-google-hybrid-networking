@@ -50,6 +50,7 @@ variable "vpns" {
     project_id                      = optional(string)
     name                            = optional(string)
     description                     = optional(string)
+      ike_version          = optional(number)
     region                          = optional(string)
     cloud_router                    = optional(string)
     cloud_vpn_gateway               = optional(string)
