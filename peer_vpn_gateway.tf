@@ -7,12 +7,12 @@ locals {
   }
   _peer_vpn_gateways = [for i, v in var.peer_vpn_gateways :
     {
-      create       = lookup(v, "create", true)
-      project_id   = lookup(v, "project_id", var.project_id)
-      name         = lookup(v, "name", "peergw-${i}")
-      description  = v.description
-      ip_addresses = lookup(v, "ip_addresses", [])
-      labels       = lookup(v, "labels", {})
+      create       = coalesce(lookup(v, "create", null), true)
+      project_id   = coalesce(lookup(v, "project_id", null), var.project_id)
+      name         = coalesce(lookup(v, "name", null), "peergw-${i}")
+      description  = lookup(v, "description", null)
+      ip_addresses = coalesce(lookup(v, "ip_addresses", null), [])
+      labels       = coalesce(lookup(v, "labels", null), {})
     }
   ]
   peer_vpn_gateways = [for i, v in local._peer_vpn_gateways :

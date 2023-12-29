@@ -1,11 +1,11 @@
 locals {
   _cloud_vpn_gateways = [for i, v in var.cloud_vpn_gateways :
     merge(v, {
-      create     = lookup(v, "create", true)
-      project_id = lower(trimspace(lookup(v, "project_id", var.project_id)))
-      network    = lower(trimspace(lookup(v, "network", var.network)))
-      region     = lower(trimspace(lookup(v, "region", var.region)))
-      stack_type = upper(trimspace(lookup(v, "stack_type", "IPV4_ONLY")))
+      create     = coalesce(lookup(v, "create", null), true)
+      project_id = lower(trimspace(coalesce(lookup(v, "project_id", null), var.project_id)))
+      network    = lower(trimspace(coalesce(lookup(v, "network", null), var.network)))
+      region     = lower(trimspace(coalesce(lookup(v, "region", null), var.region)))
+      stack_type = upper(trimspace(coalesce(lookup(v, "stack_type", null), "IPV4_ONLY")))
     })
   ]
   __cloud_vpn_gateways = [for i, v in local._cloud_vpn_gateways :
