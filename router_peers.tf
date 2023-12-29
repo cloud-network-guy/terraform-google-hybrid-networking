@@ -5,19 +5,19 @@ locals {
       project_id                = v.project_id
       name                      = lower(trimspace(coalesce(v.peer_bgp_name, "${v.name}-${i}")))
       region                    = v.region
-      router                    = coalesce(v.router, var.cloud_router)
+      router                    = coalesce(lookup(v, "router", null), var.cloud_router)
       interface                 = v.interface_name
       peer_ip_address           = v.peer_ip_address
       peer_asn                  = coalesce(v.peer_asn, v.peer_is_gcp ? 64512 : 65000)
-      advertised_groups         = coalesce(v.advertised_groups, [])
-      advertised_route_priority = coalesce(v.advertised_priority, 100)
-      advertised_ip_ranges      = coalesce(v.advertised_ip_ranges, [])
-      enable_bfd                = coalesce(v.enable_bfd, false)
-      bfd_min_transmit_interval = coalesce(v.bfd_min_transmit_interval, 1000)
-      bfd_min_receive_interval  = coalesce(v.bfd_min_receive_interval, 1000)
-      bfd_multiplier            = coalesce(v.bfd_multiplier, 5)
-      enable                    = coalesce(v.enable, true)
-      enable_ipv6               = coalesce(v.enable_ipv6, false)
+      advertised_groups         = coalesce(lookup(v, "advertised_groups", null), [])
+      advertised_route_priority = coalesce(lookup(v, "advertised_priority", null). 100)
+      advertised_ip_ranges      = coalesce(lookup(v, "advertised_ip_ranges", null), [])
+      enable_bfd                = coalesce(lookup(v, "enable_bfd", null), false)
+      bfd_min_transmit_interval = coalesce(lookup(v, "bfd_min_transmit_interval", null), 1000)
+      bfd_min_receive_interval  = coalesce(lookup(v, "bfd_min_receive_interval", null), 1000)
+      bfd_multiplier            = coalesce(lookup(v, "bfd_multiplier", null), 5)
+      enable                    = coalesce(lookup(v, "enable", null), true)
+      enable_ipv6               = coalesce(lookup(v, "enable_ipv6", null), false)
     }
   ]
   router_peers = [for i, v in local._router_peers :
