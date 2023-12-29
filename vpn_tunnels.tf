@@ -18,10 +18,10 @@ locals {
           ike_version                     = lookup(tunnel, "ike_version", lookup(vpn, "ike_version", 2))
           ike_psk                         = tunnel.ike_psk
           vpn_gateway_interface           = coalesce(tunnel.interface_index, t % 2 == 0 ? 0 : 1)
-          peer_external_gateway_interface = lookup(tunnel, "peer_interface_index", t)
-          advertised_ip_ranges            = lookup(tunnel, "advertised_ip_ranges", vpn.advertised_ip_ranges)
-          advertised_groups               = lookup(tunnel, "advertised_groups", vpn.advertised_groups)
-          advertised_priority             = lookup(tunnel, "advertised_priority", vpn.advertised_priority)
+          peer_external_gateway_interface = coalesce(lookup(tunnel, "peer_interface_index", null, t))
+          advertised_ip_ranges            = lookup(tunnel, "advertised_ip_ranges", lookup(vpn, "advertised_ip_ranges", null))
+          advertised_groups               = lookup(tunnel, "advertised_groups", lookup(vpn, "advertised_groups", null))
+          advertised_priority             = lookup(tunnel, "advertised_priority", lookup(vpn, "advertised_priority", null))
           peer_bgp_name                   = tunnel.peer_bgp_name
           peer_ip_address                 = tunnel.peer_bgp_ip
           peer_asn                        = lookup(tunnel, "peer_bgp_asn", lookup(vpn, "peer_bgp_asn", null))
@@ -83,7 +83,7 @@ locals {
         "abcdefghij0123456789"
       )
       peer_external_gateway_interface = v.peer_is_gcp ? null : v.peer_external_gateway_interface
-    }) if v.create
+    }) if v.create == true
   ]
 }
 
