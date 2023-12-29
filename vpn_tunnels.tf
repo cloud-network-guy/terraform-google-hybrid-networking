@@ -3,33 +3,31 @@ locals {
     [for i, vpn in var.vpns :
       [for t, tunnel in vpn.tunnels :
         {
-          create                          = coalesce(tunnel.create, true)
+          create                          = coalesce(lookup(tunnel, "create", null), true)
           is_vpn                          = true
           is_interconnect                 = false
-          project_id                      = coalesce(lookup(vpn, "project_id", null), var.project_id)
-          region                          = coalesce(lookup(vpn, "region", null), var.region)
-          router                          = coalesce(lookup(vpn, "cloud_router", null), var.cloud_router)
+          project_id                      = coalesce(vpn.project_id, var.project_id)
+          region                          = coalesce(vpn.region, var.region)
+          router                          = coalesce(vpn.cloud_router, var.cloud_router)
           cloud_vpn_gateway               = vpn.cloud_vpn_gateway
           peer_gcp_vpn_gateway_project_id = coalesce(vpn.peer_gcp_vpn_gateway_project_id, vpn.project_id, var.project_id)
           peer_gcp_vpn_gateway            = vpn.peer_gcp_vpn_gateway
           peer_external_gateway           = try(coalesce(vpn.peer_vpn_gateway, try(local.peer_vpn_gateways[vpn.peer_vpn_gateway].name, null)), null)
-          description                     = lookup(tunnel, "description", lookup(vpn, "description", null))
+          description                     = try(coalesce(tunnel.description, vpn.description), null)
           ip_range                        = tunnel.cloud_router_ip
-          ike_version                     = lookup(tunnel, "ike_version", lookup(vpn, "ike_version", 2))
+          ike_version                     = coalesce(tunnel.ike_version, vpn.ike_version, 2)
           ike_psk                         = tunnel.ike_psk
           vpn_gateway_interface           = coalesce(tunnel.interface_index, t % 2 == 0 ? 0 : 1)
           peer_external_gateway_interface = coalesce(lookup(tunnel, "peer_interface_index", null), t)
-          advertised_ip_ranges            = lookup(tunnel, "advertised_ip_ranges", lookup(vpn, "advertised_ip_ranges", null))
-          advertised_groups               = lookup(tunnel, "advertised_groups", lookup(vpn, "advertised_groups", null))
-          advertised_priority             = lookup(tunnel, "advertised_priority", lookup(vpn, "advertised_priority", null))
+          advertised_ip_ranges            = try(coalesce(tunnel.advertised_ip_ranges, vpn.advertised_ip_ranges), null)
+          advertised_groups               = try(coalesce(tunnel.advertised_groups, vpn.advertised_groups), null)
+          advertised_priority             = try(coalesce(tunnel.advertised_priority, vpn.advertised_priority), null)
           peer_bgp_name                   = tunnel.peer_bgp_name
           peer_ip_address                 = tunnel.peer_bgp_ip
-          peer_asn                        = lookup(tunnel, "peer_bgp_asn", lookup(vpn, "peer_bgp_asn", null))
+          peer_asn                        = try(coalesce(tunnel.peer_bgp_asn, vpn.peer_bgp_asn), null)
           enable                          = coalesce(tunnel.enable, true)
           enable_ipv6                     = coalesce(tunnel.enable, false)
           enable_bfd                      = try(coalesce(tunnel.enable_bfd, vpn.enable_bfd), null)
-          bfd_min_transmit_interval       = 1000
-          bfd_min_receive_interval        = 1000
           bfd_multiplier                  = vpn.bfd_multiplier
           vpn_name                        = vpn.name
           tunnel_name                     = tunnel.name
