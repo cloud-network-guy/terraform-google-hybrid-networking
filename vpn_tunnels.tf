@@ -7,8 +7,8 @@ locals {
           is_vpn                          = true
           is_interconnect                 = false
           project_id                      = coalesce(lookup(vpn, "project_id", null), var.project_id)
-          region                          = coalesce(lookup(v, "region", null), var.region)
-          router                          = coalesce(lookup(v, "cloud_router", null), var.cloud_router)
+          region                          = coalesce(lookup(vpn, "region", null), var.region)
+          router                          = coalesce(lookup(vpn, "cloud_router", null), var.cloud_router)
           cloud_vpn_gateway               = vpn.cloud_vpn_gateway
           peer_gcp_vpn_gateway_project_id = coalesce(vpn.peer_gcp_vpn_gateway_project_id, vpn.project_id, var.project_id)
           peer_gcp_vpn_gateway            = vpn.peer_gcp_vpn_gateway
