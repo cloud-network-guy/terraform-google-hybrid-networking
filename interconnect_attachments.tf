@@ -31,6 +31,7 @@ locals {
     for i, v in local._interconnect_attachments :
     merge(v, {
       interconnect    = v.type == "DEDICATED" ? v.interconnect : null
+      interface_name  = coalesce(v.interface_name, "if-${v.name}")
       attachment_name = v.name
       index_key       = "${v.project_id}/${v.region}/${v.name}"
     }) if v.create == true
