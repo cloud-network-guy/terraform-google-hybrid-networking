@@ -2,27 +2,26 @@ locals {
   _interconnect_attachments = flatten([
     for i, v in var.interconnects : [
       for a, attachment in v.attachments : {
-        create          = coalesce(v.create, true)
-        is_interconnect = true
-        is_vpn          = false
-        peer_is_gcp     = false
-        #attachment_name      = attachment.name,
-        type                 = upper(coalesce(v.type, "PARTNER"))
-        project_id           = coalesce(v.project_id, var.project_id)
-        name                 = coalesce(attachment.name, "attachment-${i}-${a}")
-        description          = attachment.description
-        region               = coalesce(v.region, var.region)
-        router               = v.cloud_router
+        create               = lookup(v, "create", true)
+        is_interconnect      = true
+        is_vpn               = false
+        peer_is_gcp          = false
+        type                 = upper(lookup(v, "type", "PARTNER"))
+        project_id           = lookup(v, "project_id", var.project_id)
+        name                 = lookup(attachment, "name", "attachment-${i}-${a}")
+        description          = lookup(attachment, "description")
+        region               = lookup(v, "region", var.region)
+        router               = lookup(v, "cloud_router", var.cloud_router)
         interface_name       = attachment.interface_name
         peer_bgp_ip          = attachment.peer_bgp_name
         peer_bgp_name        = attachment.peer_bgp_name
-        peer_asn             = coalesce(attachment.peer_bgp_asn, 16550)
-        advertised_ip_ranges = coalesce(v.advertised_ip_ranges, [])
+        peer_asn             = lookup(attachment, "peer_bgp_asn", 16550)
+        advertised_ip_ranges = lookup(v, "advertised_ip_ranges", null)
         advertised_groups    = []
-        advertised_priority  = coalesce(attachment.advertised_priority, v.advertised_priority, 100)
+        advertised_priority  = lookup(attachment, "advertised_priority", lookup(v, "advertised_priority", null))
         ip_range             = attachment.cloud_router_ip
         peer_ip_address      = attachment.peer_bgp_ip
-        mtu                  = coalesce(attachment.mtu, v.mtu, 1440)
+        mtu                  = lookup(attachment, "mtu", lookup(v, "mtu", 1440))
         admin_enabled        = true #coalesce(attachment.enable, true)
         encryption           = "NONE"
       }

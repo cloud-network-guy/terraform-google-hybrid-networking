@@ -6,12 +6,17 @@ variable "project_id" {
 variable "region" {
   type        = string
   description = "Default GCP Region Name (can be overridden at resource level)"
+  default     = "us-central1"
+}
+variable "cloud_router" {
+  type        = string
+  description = "Default Cloud Router Name (can be overridden at resource level)"
   default     = null
 }
-variable "network_project_id" {
+variable "network" {
   type        = string
-  description = "Default Shared VPC Host Project (can be overridden at resource level)"
-  default     = null
+  description = "Default VPC Network Name to attach to"
+  default     = "default"
 }
 variable "cloud_vpn_gateways" {
   description = "GCP Cloud VPN Gateways"

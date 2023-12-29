@@ -14,7 +14,7 @@ locals {
   router_interfaces = [for i, v in local._router_interfaces :
     merge(v, {
       index_key = "${v.project_id}/${v.region}/${v.router}/${v.name}"
-    }) if v.create
+    }) if v.create == true
   ]
 }
 
@@ -28,6 +28,9 @@ resource "google_compute_router_interface" "default" {
   ip_range                = each.value.ip_range
   vpn_tunnel              = each.value.vpn_tunnel
   interconnect_attachment = each.value.interconnect_attachment
-  depends_on              = [google_compute_interconnect_attachment.default, google_compute_vpn_tunnel.default]
+  depends_on = [
+    google_compute_interconnect_attachment.default,
+    google_compute_vpn_tunnel.default
+  ]
 }
 
