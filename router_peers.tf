@@ -10,7 +10,7 @@ locals {
       peer_ip_address           = v.peer_ip_address
       peer_asn                  = coalesce(v.peer_asn, v.peer_is_gcp ? 64512 : 65000)
       advertised_groups         = coalesce(v.advertised_groups, [])
-      advertised_route_priority = coalesce((v.advertised_priority, 100)
+      advertised_route_priority = coalesce(v.advertised_priority, 100)
       advertised_ip_ranges      = coalesce(v.advertised_ip_ranges, [])
       enable_bfd                = coalesce(v.enable_bfd, false)
       bfd_min_transmit_interval = coalesce(v.bfd_min_transmit_interval, 1000)
