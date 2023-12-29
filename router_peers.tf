@@ -9,22 +9,22 @@ locals {
       interface                 = v.interface_name
       peer_ip_address           = v.peer_ip_address
       peer_asn                  = coalesce(v.peer_asn, v.peer_is_gcp ? 64512 : 65000)
-      advertised_groups         = lookup(v, "advertised_groups", [])
-      advertised_route_priority = lookup(v, "advertised_priority", 100)
-      advertised_ip_ranges      = lookup(v, "advertised_ip_ranges", [])
-      enable_bfd                = lookup(v, "enable_bfd", false)
-      bfd_min_transmit_interval = lookup(v, "bfd_min_transmit_interval", 1000)
-      bfd_min_receive_interval  = lookup(v, "bfd_min_receive_interval", 1000)
-      bfd_multiplier            = lookup(v, "bfd_multiplier", 5)
-      enable                    = lookup(v, "enable", true)
-      enable_ipv6               = lookup(v, "enable_ipv6", false)
+      advertised_groups         = coalesce(v.advertised_groups, [])
+      advertised_route_priority = coalesce((v.advertised_priority, 100)
+      advertised_ip_ranges      = coalesce(v.advertised_ip_ranges, [])
+      enable_bfd                = coalesce(v.enable_bfd, false)
+      bfd_min_transmit_interval = coalesce(v.bfd_min_transmit_interval, 1000)
+      bfd_min_receive_interval  = coalesce(v.bfd_min_receive_interval, 1000)
+      bfd_multiplier            = coalesce(v.bfd_multiplier, 5)
+      enable                    = coalesce(v.enable, true)
+      enable_ipv6               = coalesce(v.enable_ipv6, false)
     }
   ]
   router_peers = [for i, v in local._router_peers :
     merge(v, {
-      advertise_mode = length(coalesce(v.advertised_ip_ranges, [])) > 0 ? "CUSTOM" : "DEFAULT"
+      advertise_mode = length(v.advertised_ip_ranges) > 0 ? "CUSTOM" : "DEFAULT"
       index_key      = "${v.project_id}/${v.region}/${v.router}/${v.name}"
-    }) if v.create
+    }) if v.create == true
   ]
 }
 
