@@ -23,7 +23,7 @@ locals {
         peer_ip_address      = attachment.peer_bgp_ip
         mtu                  = coalesce(attachment.mtu, v.mtu, 1440)
         admin_enabled        = true #coalesce(attachment.enable, true)
-        encryption           = "NONE"
+        encryption           = upper(trimspace(coalesce(v.encryption, "NONE")))
       }
     ]
   ])
