@@ -108,7 +108,7 @@ variable "interconnects" {
       description = optional(string)
     })))
     mtu            = optional(number)
-    encryption = optional(string)
+    encryption     = optional(string)
     enable         = optional(bool)
     enable_bfd     = optional(bool)
     bfd_parameters = optional(list(number))
