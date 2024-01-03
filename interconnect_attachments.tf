@@ -24,7 +24,7 @@ locals {
         mtu                      = coalesce(attachment.mtu, v.mtu, 1440)
         admin_enabled            = true #coalesce(attachment.enable, true)
         encryption               = upper(trimspace(coalesce(v.encryption, "NONE")))
-        ipsec_internal_addresses = v.ipsec_internal_addresses
+        ipsec_internal_addresses = attachment.ipsec_internal_addresses
       }
     ]
   ])
