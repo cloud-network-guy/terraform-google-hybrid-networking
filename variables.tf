@@ -128,6 +128,7 @@ variable "interconnects" {
         range       = string
         description = optional(string)
       })))
+      ipsec_internal_addresses = optional(list(string))
     }))
   }))
   default = []
